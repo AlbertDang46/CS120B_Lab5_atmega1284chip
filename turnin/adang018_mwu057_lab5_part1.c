@@ -1,0 +1,53 @@
+/*	Author: Albert Dang adang018@ucr.edu
+ *      Partner(s) Name: Min-Hua Wu mwu057@ucr.edu
+ *	Lab Section: 022
+ *	Assignment: Lab 3  Exercise 1
+ *	Exercise Description: [optional - include for your own benefit]
+ *
+ *	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
+ */
+#include <avr/io.h>
+#ifdef _SIMULATE_
+#include "simAVRHeader.h"
+#endif
+
+int main(void) {
+    DDRA = 0x00; PORTA = 0xFF;
+    DDRC = 0xFF; PORTC = 0x00;
+
+    unsigned char fuelLevel = 0x00;
+
+    while (1) {
+        fuelLevel = 0x00;
+        switch(~PINA) {
+            case 15:
+            case 14:
+            case 13: fuelLevel = (fuelLevel | 0x01);
+            case 12:
+            case 11:
+            case 10: fuelLevel = (fuelLevel | 0x02);
+            case  9:
+            case  8:
+            case  7: fuelLevel = (fuelLevel | 0x04);
+            case  6:
+            case  5: fuelLevel = (fuelLevel | 0X08);
+            case  4:
+            case  3: fuelLevel = (fuelLevel | 0x10);
+            case  2:
+            case  1: fuelLevel = (fuelLevel | 0x20);
+                     break;
+            case  0: fuelLevel = 0x00;
+                     break;
+            default: fuelLevel = 0x00;
+                     break;
+       }
+
+       if(~PINA <= 4) {
+          fuelLevel = (fuelLevel | 0x40);
+       }
+
+       PORTC = fuelLevel;
+    }
+    return 1;
+}
